@@ -9,8 +9,13 @@ jobs:
     name: Ansible Lint
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
       - name: Git checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Populate ansible config
         run: |
@@ -37,4 +42,4 @@ jobs:
           EOF
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@main
+        uses: ansible/ansible-lint@4848777c2d3df0f886300249e1e057d04f77824c # main

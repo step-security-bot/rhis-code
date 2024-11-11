@@ -8,13 +8,24 @@ on:
   issue_comment:
     types: [created, edited]
 
+permissions:
+  contents: read
+
 jobs:
   remove-inactive:
+    permissions:
+      issues: write  # for actions-cool/issues-helper to update issues
+      pull-requests: write  # for actions-cool/issues-helper to update PRs
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
+
       - name: remove inactive
         if: github.event.issue.state == 'open' && github.event.issue.user != 'github-actions'
-        uses: actions-cool/issues-helper@v3
+        uses: actions-cool/issues-helper@a610082f8ac0cf03e357eb8dd0d5e2ba075e017e # v3.6.0
         with:
           actions: 'remove-labels'
           issue-number: ${{ github.event.issue.number }}
